@@ -1,3 +1,6 @@
+[@@@ocaml.warnerror "-34"]
+[@@@ocaml.warning "-34"]
+
 open GT
 open Language
 
@@ -534,9 +537,10 @@ let[@ocaml.warning "-8-20"] rec eval env
           eval env
             (cstack, stack', glob, loc, i, o)
             (if
-             (c = "z" && Value.to_int x = 0) || (c = "nz" && Value.to_int x <> 0)
-            then env#labeled l
-            else prg')
+               (c = "z" && Value.to_int x = 0)
+               || (c = "nz" && Value.to_int x <> 0)
+             then env#labeled l
+             else prg')
       | CLOSURE (name, dgs) ->
           let closure =
             Array.of_list
