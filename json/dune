@@ -1,0 +1,14 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
+
+(executable
+ (name json_bytecode)
+ (public_name json_bytecode)
+ (flags
+  (:standard -rectypes))
+ (libraries yojson liba))
+
+(cram
+ (deps ./json_bytecode.exe))
