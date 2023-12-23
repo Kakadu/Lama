@@ -1,11 +1,11 @@
 (rule
  (target ./test001.exe)
- (deps test001.lama)
+ (deps test001.lama ../runtime/Std.i)
  (action
   (setenv
    LAMA
    ../runtime
-   (run ../src/Driver.exe test001.lama -o %{target}))))
+   (run ../src/Driver.exe test001.lama -ds -o %{target}))))
 
 (cram
  (deps ./test001.exe ./test001.input orig/test001.log))
