@@ -8,7 +8,7 @@
  (public_name json_bytecode)
  (flags
   (:standard -rectypes))
- (libraries yojson liba))
+ (libraries opium cohttp-lwt-unix yojson liba))
 
 (cram
  (deps ./json_bytecode.exe))

@@ -1,7 +1,10 @@
   $ echo '[' >> a.json
+  $ echo '{ kind: "IMPORT", value: "Std" },' >> a.json
+  $ echo '{ kind: "EXTERN", value: "Lwrite" },' >> a.json
   $ echo '{ kind: "CONST", value: 1 },' >> a.json
   $ echo '{ kind: "CONST", value: 5 },' >> a.json
-  $ echo '{ kind: "binop", value: "+" }' >> a.json
+  $ echo '{ kind: "binop", value: "+" },' >> a.json
+  $ echo '{ kind: "CALL", fname: "Lwrite", argc: 1 }' >> a.json
   $ echo ']' >> a.json
   $ cat a.json
   [
@@ -15,7 +18,7 @@
 
   $ echo '[' >> 02.json
 $ echo '{ kind: "CONST", value: 1 },' >> 02.json
-  $ echo '{ kind: "LD", value: { kind: "Local", value: "s" } },' >> 02.json
+$ echo '{ kind: "LD", value: { kind: "Local", value: "s" } },' >> 02.json
   $ echo '{ kind: "CONST", value: 5 },' >> 02.json
   $ echo '{ kind: "binop", value: "+" }' >> 02.json
   $ echo ']' >> 02.json
