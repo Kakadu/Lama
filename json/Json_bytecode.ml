@@ -29,8 +29,8 @@ let () =
     let contents = In_channel.with_open_text name In_channel.input_all in
     let j = Yojson.Safe.from_string contents in
     let bc = bytecode_of_json j in
-    let _rez : int list = SM.run bc [] in
-    Format.printf "Result: @[%a@]" Format.(pp_print_list pp_print_int) _rez;
+    let rez : int list = SM.run bc [] in
+    Format.printf "Result: @[%a@]\n%!" Format.(pp_print_list pp_print_int) rez;
     ()
   in
   Arg.parse [] on_file "help"
