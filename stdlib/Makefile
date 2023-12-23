@@ -2,7 +2,15 @@ SHELL := /bin/bash
 
 FILES=$(wildcard *.lama)
 ALL=$(sort $(FILES:.lama=.o))
-LAMAC=../src/lamac -g
+ifneq ("$(wildcard ../src/Driver.exe)","")
+    #$(info $(shell ls ../src))
+    #$(info $(shell ls ../runtime))
+    LAMAC=../src/Driver.exe -g
+else
+    #$(info There is driver.exe)
+    LAMAC=../src/lamac -g
+endif
+
 
 all: $(ALL)
 

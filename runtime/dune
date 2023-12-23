@@ -1,0 +1,23 @@
+(rule
+ (target ./gc.o)
+ (deps
+  (:dep1 gc.c)
+  gc.h
+  runtime_common.h)
+ (action
+  (run gcc -rdynamic -m32 -g2 -fstack-protector-all -DLAMA_ENV -c %{dep1})))
+
+(rule
+ (target ./runtime.o)
+ (deps
+  (:dep1 runtime.c)
+  runtime.h
+  runtime_common.h)
+ (action
+  (run gcc -rdynamic -m32 -g2 -fstack-protector-all -DLAMA_ENV -c %{dep1})))
+
+(rule
+ (target ./runtime.a)
+ (deps runtime.o gc.o)
+ (action
+  (run ar rc %{target} %{deps})))

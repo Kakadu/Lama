@@ -1,0 +1,24 @@
+(rule
+ (targets List.o Ref.o Fun.o STM.o Buffer.o Data.o Collection.o)
+ (deps
+  Makefile
+  ../src/Driver.exe
+  ../runtime/Std.i
+  ; 
+  Array.lama
+  Buffer.lama
+  Collection.lama
+  Data.lama
+  Fun.lama
+  Lazy.lama
+  List.lama
+  Matcher.lama
+  Ostap.lama
+  Random.lama
+  Ref.lama
+  STM.lama
+  Timer.lama
+  ;
+  )
+ (action
+  (run make)))
