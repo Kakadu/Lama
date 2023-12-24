@@ -3,3 +3,5 @@ commitdate.tex
 *.out
 *.synctex.gz
 *.toc
+*.pdf
+
