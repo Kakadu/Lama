@@ -3,12 +3,27 @@
   (flags
    (:standard -warn-error -A))))
 
+(library
+ (name libSerialize)
+ (flags
+  (:standard -rectypes))
+ (modules libSerialize)
+ (libraries yojson liba))
+
+(executable
+ (name runQCsm)
+ (modules runQCsm)
+ (flags
+  (:standard -rectypes))
+ (libraries libSerialize qcheck-core qcheck-core.runner))
+
 (executable
  (name json_bytecode)
  (public_name json_bytecode)
  (flags
   (:standard -rectypes))
- (libraries opium cohttp-lwt-unix yojson liba))
+ (modules json_bytecode)
+ (libraries libSerialize opium cohttp-lwt-unix yojson liba))
 
 (cram
  (deps ./json_bytecode.exe))
