@@ -1,0 +1,18 @@
+{
+  "kind": "Scope",
+  "decls": [
+    [
+      "x",
+      [
+        "Local",
+        { "kind": "Variable", "payload": { "kind": "Const", "value": 1 } }
+      ]
+    ]
+  ],
+  "body": {
+    "kind": "Binop",
+    "name": "+",
+    "l": { "kind": "Var", "value": "x" },
+    "r": { "kind": "Const", "value": 1 }
+  }
+}
