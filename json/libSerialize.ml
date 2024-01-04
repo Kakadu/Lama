@@ -175,9 +175,9 @@ let to_insn : Yojson.Safe.t -> SM.insn = function
   | `Assoc
       [
         ("kind", `String k);
-        ("f1", `String fname);
-        ("f2", `Int argc);
-        ("f3", `Bool b);
+        ("fname", `String fname);
+        ("argc", `Int argc);
+        ("flg", `Bool b);
       ]
     when String.uppercase_ascii k = "CALL" ->
       CALL (fname, argc, b)
@@ -273,9 +273,9 @@ let insn_to_json = function
       `Assoc
         [
           ("kind", `String "CALL");
-          ("f1", `String s);
-          ("f2", `Int n);
-          ("f3", `Bool b);
+          ("fname", `String s);
+          ("argc", `Int n);
+          ("flg", `Bool b);
         ]
   | RET -> `Assoc [ ("kind", `String "RET") ]
   | DROP -> `Assoc [ ("kind", `String "DROP") ]
@@ -301,7 +301,10 @@ module Expr = struct
     | x -> `String (GT.show Language.Expr.atr x)
 
   let qualifier_to_json : Language.Expr.qualifier -> Yojson.Safe.t = function
-    | x -> `String (GT.show Language.Expr.qualifier x)
+    | `Local -> `String "Local"
+    | `Public -> `String "Public"
+    | `Extern -> `String "Extern"
+    | `PublicExtern -> `String "PublicExtern"
 
   let rec decl_to_json : Language.Expr.decl -> _ =
    fun (q, info) ->

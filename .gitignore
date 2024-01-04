@@ -6,3 +6,7 @@
 .merlin
 
 .vscode
+
+# easier vendoring 
+/ostap
+

@@ -5,6 +5,7 @@
 
 (library
  (name libSerialize)
+ (package Lama-Sirius)
  (flags
   (:standard -rectypes))
  (modules libSerialize)
@@ -12,6 +13,7 @@
 
 (executable
  (name runQCsm)
+ ;(package Lama-Sirius)
  (modules runQCsm)
  (flags
   (:standard -rectypes))
@@ -19,11 +21,26 @@
 
 (executable
  (name json_bytecode)
+ (package Lama-Sirius)
  (public_name json_bytecode)
  (flags
   (:standard -rectypes))
  (modules json_bytecode)
  (libraries libSerialize opium cohttp-lwt-unix yojson liba))
 
+(executable
+ (name lama_bc_json)
+ (package Lama-Sirius)
+ (public_name lama_bc_json)
+ (flags
+  (:standard -rectypes))
+ (modules lama_bc_json)
+ (libraries libSerialize yojson liba))
+
 (cram
  (deps ./json_bytecode.exe))
+
+(install
+ (section share)
+ (source_trees tasks)
+ (package Lama-Sirius))

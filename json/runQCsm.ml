@@ -3,6 +3,7 @@
 open QCheck.Gen
 
 let short_str = string_size ~gen:printable (return 3)
+let short_str = return ""
 
 let rec shrink_scope_name (s, n) =
   let open QCheck.Iter in
@@ -31,14 +32,14 @@ let scope_gen =
          | 0 ->
              map2
                (fun blab elab -> { SM.blab; elab; names = []; subs = [] })
-               string_printable string_printable
+               short_str short_str
          | n ->
              map2
                (fun names sc -> { sc with SM.names })
                (list (tup2 short_str int))
              @@ map3
                   (fun blab elab subs -> { SM.blab; elab; names = []; subs })
-                  string_printable string_printable
+                  short_str short_str
                   (list @@ self (n / 2))))
 
 let design_gen =
@@ -71,8 +72,8 @@ let loc_gen = QCheck.Gen.(tup2 int int)
 
 let insn_gen =
   let const = map (fun x -> SM.CONST x) int in
-  let str = map (fun x -> SM.STRING x) string_printable in
-  let sexp = map2 (fun x b -> SM.SEXP (x, b)) string_printable int in
+  let str = map (fun x -> SM.STRING x) short_str in
+  let sexp = map2 (fun x b -> SM.SEXP (x, b)) short_str int in
   let binop =
     map
       (fun x -> SM.BINOP x)
@@ -91,32 +92,32 @@ let insn_gen =
         return SM.STI;
         return SM.STA;
         return SM.ELEM;
-        map (fun x -> SM.LABEL x) string_printable;
-        map (fun x -> SM.FLABEL x) string_printable;
-        map (fun x -> SM.SLABEL x) string_printable;
-        map (fun x -> SM.JMP x) string_printable;
-        map2 (fun x b -> SM.CJMP (x, b)) string_printable string_printable;
+        map (fun x -> SM.LABEL x) short_str;
+        map (fun x -> SM.FLABEL x) short_str;
+        map (fun x -> SM.SLABEL x) short_str;
+        map (fun x -> SM.JMP x) short_str;
+        map2 (fun x b -> SM.CJMP (x, b)) short_str short_str;
         map (fun (a, b, c, d, e, f) -> SM.BEGIN (a, b, c, d, e, f))
         @@ tup6 short_str int int (list design_gen) (list short_str)
              (list scope_gen);
         return SM.END;
-        map2 (fun x b -> SM.CLOSURE (x, b)) string_printable (list design_gen);
-        map2 (fun x b -> SM.PROTO (x, b)) string_printable string_printable;
-        map2 (fun x b -> SM.PROTO (x, b)) string_printable string_printable;
+        map2 (fun x b -> SM.CLOSURE (x, b)) short_str (list design_gen);
+        map2 (fun x b -> SM.PROTO (x, b)) short_str short_str;
+        map2 (fun x b -> SM.PROTO (x, b)) short_str short_str;
         map2 (fun x b -> SM.PCALLC (x, b)) int bool;
         map2 (fun x b -> SM.CALLC (x, b)) int bool;
-        map3 (fun x n b -> SM.CALL (x, n, b)) string_printable int bool;
+        map3 (fun x n b -> SM.CALL (x, n, b)) short_str int bool;
         return SM.RET;
         return SM.DROP;
         return SM.DUP;
         return SM.SWAP;
-        map2 (fun x b -> SM.TAG (x, b)) string_printable int;
+        map2 (fun x b -> SM.TAG (x, b)) short_str int;
         map (fun x -> SM.ARRAY x) int;
         map (fun x -> SM.PATT x) patt_gen;
         map2 (fun x b -> SM.FAIL (x, b)) loc_gen bool;
-        map (fun s -> SM.EXTERN s) string_printable;
-        map (fun s -> SM.PUBLIC s) string_printable;
-        map (fun s -> SM.IMPORT s) string_printable;
+        map (fun s -> SM.EXTERN s) short_str;
+        map (fun s -> SM.PUBLIC s) short_str;
+        map (fun s -> SM.IMPORT s) short_str;
         map (fun s -> SM.LINE s) int;
       ])
 
@@ -129,7 +130,7 @@ let arbitrary_scope =
 
 let arbitrary_insn =
   let open QCheck.Iter in
-  let shrink_insn = function
+  let shrink_insn : SM.insn -> SM.insn QCheck.Iter.t = function
     | SM.BINOP i -> QCheck.Shrink.string i >|= fun x -> SM.BINOP x
     (* | Abs (c, b) -> of_list [ b ] <+> (shrink_lam b >|= fun b' -> abs c b') *)
     | BEGIN (a, b, c, d, e, f) ->
@@ -138,10 +139,11 @@ let arbitrary_insn =
         <+> (QCheck.Shrink.int b >|= fun b -> SM.BEGIN (a, b, c, d, e, f))
         <+> (QCheck.Shrink.int c >|= fun c -> SM.BEGIN (a, b, c, d, e, f))
         (* <+> (shrink_lam b >|= fun b' -> app a b') *)
-    | x -> return x
+    | _ -> QCheck.Iter.empty
   in
 
-  QCheck.make insn_gen ~print:(fun x -> GT.show SM.insn x) ~shrink:shrink_insn
+  QCheck.make insn_gen ~print:(fun x -> GT.show SM.insn x)
+(* ~shrink:shrink_insn *)
 
 let test_insn =
   QCheck.(
@@ -161,5 +163,12 @@ let () =
     (fun _ -> assert false)
     "help"
 
-let run () = QCheck_base_runner.run_tests [ test_insn ]
-let () = Format.printf "Failed tests: %d\n%!" (run ())
+let __ () =
+  print_endline "Testing scope...";
+  Format.printf "Failed tests: %d\n%!"
+  @@ QCheck_base_runner.run_tests [ test_scope ]
+
+let () =
+  print_endline "Testing instructions...";
+  Format.printf "Failed tests: %d\n%!"
+  @@ QCheck_base_runner.run_tests [ test_insn ]

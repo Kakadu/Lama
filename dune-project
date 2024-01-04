@@ -1,3 +1,9 @@
-(lang dune 3.3)
+(lang dune 3.11)
 
 (cram enable)
+
+(package
+ (name Lama))
+
+(package
+ (name Lama-Sirius))
