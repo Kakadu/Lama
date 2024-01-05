@@ -218,7 +218,7 @@ let to_insn : Yojson.Safe.t -> SM.insn = function
 let json_to_bytecode : Yojson.Safe.t -> SM.prg = function
   | `List items -> List.map to_insn items
   | _ -> failwiths "Bad json. %s %d" __FILE__ __LINE__
-
+(* let json_to_bytecode : Yojson.Safe.t -> SM.insn = to_insn *)
 (*  *)
 
 let insn_to_json = function

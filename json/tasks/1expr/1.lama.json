@@ -10,9 +10,8 @@
     ]
   ],
   "body": {
-    "kind": "Binop",
-    "name": "+",
-    "l": { "kind": "Var", "value": "x" },
-    "r": { "kind": "Const", "value": 1 }
+    "kind": "Call",
+    "f": { "kind": "Var", "value": "write" },
+    "args": [ { "kind": "Var", "value": "x" } ]
   }
 }
