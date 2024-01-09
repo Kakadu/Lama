@@ -1,6 +1,6 @@
 (rule
  (target ./test001.exe)
- (deps test001.lama ../runtime/Std.i)
+ (deps test001.lama ../runtime/Std.i ../runtime/runtime.a)
  (action
   (setenv
    LAMA
