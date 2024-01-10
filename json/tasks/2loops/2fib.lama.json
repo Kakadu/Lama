@@ -14,11 +14,7 @@
       "value": {
         "kind": "Assign",
         "l": { "kind": "Ref", "value": "n" },
-        "r": {
-          "kind": "Call",
-          "f": { "kind": "Var", "value": "read" },
-          "args": []
-        }
+        "r": { "kind": "Const", "value": 5 }
       }
     },
     "r": {

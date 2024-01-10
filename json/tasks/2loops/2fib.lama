@@ -1,6 +1,6 @@
 var n, fib_1, fib_2, fib, i;
 
-n := read ();
+n := 5;
 
 i     := 2;
 fib_1 := 1;

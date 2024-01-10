@@ -1,7 +1,37 @@
 (rule
  (deps
   (:lama 1fac.lama))
- (targets 1.lama.json)
+ (targets 1fac.lama.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -src2json
+   %{lama})))
+
+(rule
+ (deps
+  (:lama 1fac.lama))
+ (targets 1fac.bc.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -compile-to-bc-json
+   %{lama})))
+
+(rule
+ (deps
+  (:lama 2fib.lama))
+ (targets 2fib.lama.json)
  (mode (promote))
  (action
   (run
@@ -16,7 +46,7 @@
 (rule
  (deps
   (:lama 2fib.lama))
- (targets 2.lama.json)
+ (targets 2fib.bc.json)
  (mode (promote))
  (action
   (run
@@ -25,5 +55,5 @@
    ../../../runtime
    -o
    %{targets}
-   -src2json
+   -compile-to-bc-json
    %{lama})))

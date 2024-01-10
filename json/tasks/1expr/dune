@@ -21,13 +21,11 @@
  (targets 1.bc.json)
  (mode (promote))
  (action
-  (progn
-   ;(run ls ../../../runtime)
-   (run
-    %{project_root}/json/json_bytecode.exe
-    -path
-    ../../../runtime
-    -o
-    %{targets}
-    -compile-to-bc-json
-    %{lama}))))
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -compile-to-bc-json
+   %{lama})))
