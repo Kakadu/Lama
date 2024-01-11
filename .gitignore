@@ -9,4 +9,5 @@
 
 # easier vendoring 
 /ostap
+/*.install
 

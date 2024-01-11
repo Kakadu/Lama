@@ -26,7 +26,9 @@
  (flags
   (:standard -rectypes))
  (modules json_bytecode)
- (libraries libSerialize opium cohttp-lwt-unix yojson liba))
+ (libraries libSerialize opium yojson liba)
+ (preprocess
+  (pps GT.ppx_all)))
 
 (executable
  (name lama_bc_json)
