@@ -204,10 +204,27 @@ let start_server () =
     in
     let _ = find_tasks cfg.tasks_dir in
 
-    let print_json req =
-      Printf.printf "%s %s %d\n%!" __FUNCTION__ __FILE__ __LINE__;
-      req |> Request.to_json_exn |> fun _json ->
-      Lwt.return (Response.make ~body:(Body.of_string "Received response") ())
+    let eval_json req =
+      (* Printf.printf "%s %s %d\n%!" __FUNCTION__ __FILE__ __LINE__; *)
+      let* j = req |> Request.to_json_exn in
+      Lwt.catch
+        (fun () ->
+          let bc = LibSerialize.json_to_bytecode j in
+          let rez : int list = SM.run bc [] in
+          let str_rez =
+            Format.asprintf "Success:\n%a\n"
+              (Format.pp_print_list
+                 ~pp_sep:(fun ppf () -> Format.fprintf ppf ", ")
+                 Format.pp_print_int)
+              rez
+          in
+          Lwt.return (Response.make ~body:(Body.of_string str_rez) ()))
+        (fun exn ->
+          let str =
+            "Error:\n" ^ Printexc.get_backtrace () ^ "\n"
+            ^ Printexc.to_string exn
+          in
+          Lwt.return (Response.make ~body:(Body.of_string str) ()))
     in
     let on_not_found _ =
       Printf.printf "%s %d\n%!" __FILE__ __LINE__;
@@ -218,10 +235,9 @@ let start_server () =
       Opium.App.empty
       |> Opium.App.cmd_name "sirius2024"
       |> Opium.App.port cfg.http_port
-      |> describe_lang `Lang1
-      (* |> App.get "/lang1/1/text" (describe `Arith 1 `Text) *)
-      |> describe_lang `Lang2
-      |> describe_lang `Lang3 |> App.not_found on_not_found
+      |> describe_lang `Lang1 |> App.post "/eval" eval_json
+      |> describe_lang `Lang2 |> describe_lang `Lang3
+      |> App.not_found on_not_found
     in
 
     let run_opium_server app =
