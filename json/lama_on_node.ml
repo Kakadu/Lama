@@ -8,6 +8,10 @@ module Predefined = struct
     let one = [%blob "1.lama.json"]
   end
 
+  module Funs = struct
+    let fac = [%blob "1append.bc.json"]
+  end
+
   module Other = struct
     let append = [%blob "1append.bc.json"]
   end
