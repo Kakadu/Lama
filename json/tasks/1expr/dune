@@ -1,6 +1,7 @@
 (rule
  (deps
-  (:lama 1.lama))
+  (:lama 1.lama)
+  %{project_root}/runtime/Std.i)
  (targets 1.lama.json)
  (mode (promote))
  (action
@@ -17,7 +18,8 @@
 
 (rule
  (deps
-  (:lama 1.lama))
+  (:lama 1.lama)
+  %{project_root}/runtime/Std.i)
  (targets 1.bc.json)
  (mode (promote))
  (action

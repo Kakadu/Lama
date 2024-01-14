@@ -1,4 +1,5 @@
 type patt = StrCmp | String | Array | Sexp | Boxed | UnBoxed | Closure
+[@@deriving gt ~options:{ show; enum }]
 
 type scope = {
   blab : string;

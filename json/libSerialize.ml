@@ -294,8 +294,32 @@ let insn_to_json = function
   | LINE v -> make_kv "LINE" (`Int v)
 
 module Expr = struct
-  let patt_to_json : Language.Pattern.t -> Yojson.Safe.t = function
-    | _ -> assert false
+  let rec patt_to_json : Language.Pattern.t -> Yojson.Safe.t = function
+    | ( Language.Pattern.Wildcard | Boxed | UnBoxed | StringTag | SexpTag
+      | ArrayTag | ClosureTag ) as p ->
+        `String (GT.show Language.Pattern.t p)
+    | Sexp (name, args) ->
+        `Assoc
+          [
+            ("kind", `String "Sexp");
+            ("name", `String name);
+            ("args", `List (List.map patt_to_json args));
+          ]
+    | Array args ->
+        `Assoc
+          [
+            ("kind", `String "Array");
+            ("content", `List (List.map patt_to_json args));
+          ]
+    | Named (name, arg) ->
+        `Assoc
+          [
+            ("kind", `String "Named");
+            ("name", `String name);
+            ("arg", patt_to_json arg);
+          ]
+    | Const n -> `Assoc [ ("kind", `String "Const"); ("value", `Int n) ]
+    | String n -> `Assoc [ ("kind", `String "String"); ("value", `String n) ]
 
   let atr_to_json : Language.Expr.atr -> Yojson.Safe.t = function
     | x -> `String (GT.show Language.Expr.atr x)
@@ -436,3 +460,29 @@ module Expr = struct
     | Leave -> `Assoc [ ("kind", `String "Leave") ]
     | Intrinsic _ | Control _ -> failwith "Not implemented"
 end
+(*
+   let rec fix f x = f (fix f) x
+
+   let fix_poly : (('a -> 'b) list -> 'a -> 'b) list -> ('a -> 'b) list =
+    fun l -> fix (fun self l -> List.map (fun li x -> li (self l) x) l) l
+
+   let fe [ e; o ] n = n = 0 || o (n - 1)
+   let fo [ e; o ] n = n <> 0 && e (n - 1)
+   let [ iseven; isodd ] = fix_poly [ fe; fo ]
+   let%test "" = iseven 2 = true
+   let%test "" = isodd 2 = false
+
+   type 'a pair = 'a * 'a
+
+   let map f p =
+     let a, b = p in
+     (f a, f b)
+
+   let fix_pair : (('a -> 'b) pair -> 'a -> 'b) pair -> ('a -> 'b) pair =
+    fun l -> fix (fun self l -> map (fun li x -> li (self l) x) l) l
+
+   let fe (e, o) n = n = 0 || o (n - 1)
+   let fo (e, o) n = n <> 0 && e (n - 1)
+   let iseven, isodd = fix_pair (fe, fo)
+   let%test "" = iseven 2 = true
+   let%test "" = isodd 2 = false *)
