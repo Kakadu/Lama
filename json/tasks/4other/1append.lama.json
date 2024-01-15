@@ -1,0 +1,237 @@
+{
+  "kind": "Scope",
+  "decls": [
+    [ "n", [ "Local", { "kind": "Variable" } ] ],
+    [ "x", [ "Local", { "kind": "Variable" } ] ],
+    [ "y", [ "Local", { "kind": "Variable" } ] ],
+    [
+      "append",
+      [
+        "Local",
+        {
+          "kind": "Fun",
+          "name": [ "x", "y" ],
+          "body": {
+            "kind": "Scope",
+            "decls": [],
+            "body": {
+              "kind": "Case",
+              "scru": { "kind": "Var", "value": "x" },
+              "pats": [
+                [
+                  { "kind": "Sexp", "name": "Nil", "args": [] },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": { "kind": "Var", "value": "y" }
+                  }
+                ],
+                [
+                  {
+                    "kind": "Sexp",
+                    "name": "Cons",
+                    "args": [
+                      { "kind": "Named", "name": "h", "arg": "Wildcard" },
+                      { "kind": "Named", "name": "t", "arg": "Wildcard" }
+                    ]
+                  },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Sexp",
+                      "name": "Cons",
+                      "args": [
+                        { "kind": "Var", "value": "h" },
+                        {
+                          "kind": "Call",
+                          "f": { "kind": "Var", "value": "append" },
+                          "args": [
+                            { "kind": "Var", "value": "t" },
+                            { "kind": "Var", "value": "y" }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              ],
+              "loc": [ 4, 9 ],
+              "atr": "Weak"
+            }
+          }
+        }
+      ]
+    ],
+    [
+      "printList",
+      [
+        "Local",
+        {
+          "kind": "Fun",
+          "name": [ "x" ],
+          "body": {
+            "kind": "Scope",
+            "decls": [],
+            "body": {
+              "kind": "Case",
+              "scru": { "kind": "Var", "value": "x" },
+              "pats": [
+                [
+                  { "kind": "Sexp", "name": "Nil", "args": [] },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Seq",
+                      "l": { "kind": "Skip" },
+                      "r": { "kind": "Const", "value": 0 }
+                    }
+                  }
+                ],
+                [
+                  {
+                    "kind": "Sexp",
+                    "name": "Cons",
+                    "args": [
+                      { "kind": "Named", "name": "h", "arg": "Wildcard" },
+                      { "kind": "Named", "name": "t", "arg": "Wildcard" }
+                    ]
+                  },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Seq",
+                      "l": {
+                        "kind": "Ignore",
+                        "value": {
+                          "kind": "Call",
+                          "f": { "kind": "Var", "value": "write" },
+                          "args": [ { "kind": "Var", "value": "h" } ]
+                        }
+                      },
+                      "r": {
+                        "kind": "Call",
+                        "f": { "kind": "Var", "value": "printList" },
+                        "args": [ { "kind": "Var", "value": "t" } ]
+                      }
+                    }
+                  }
+                ]
+              ],
+              "loc": [ 11, 9 ],
+              "atr": "Weak"
+            }
+          }
+        }
+      ]
+    ]
+  ],
+  "body": {
+    "kind": "Seq",
+    "l": {
+      "kind": "Ignore",
+      "value": {
+        "kind": "Assign",
+        "l": { "kind": "Ref", "value": "x" },
+        "r": {
+          "kind": "Sexp",
+          "name": "Cons",
+          "args": [
+            { "kind": "Const", "value": 1 },
+            {
+              "kind": "Sexp",
+              "name": "Cons",
+              "args": [
+                { "kind": "Const", "value": 2 },
+                { "kind": "Sexp", "name": "Nil", "args": [] }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "r": {
+      "kind": "Seq",
+      "l": {
+        "kind": "Ignore",
+        "value": {
+          "kind": "Assign",
+          "l": { "kind": "Ref", "value": "y" },
+          "r": {
+            "kind": "Sexp",
+            "name": "Cons",
+            "args": [
+              { "kind": "Const", "value": 3 },
+              {
+                "kind": "Sexp",
+                "name": "Cons",
+                "args": [
+                  { "kind": "Const", "value": 4 },
+                  { "kind": "Sexp", "name": "Nil", "args": [] }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "r": {
+        "kind": "Seq",
+        "l": {
+          "kind": "Ignore",
+          "value": {
+            "kind": "Call",
+            "f": { "kind": "Var", "value": "printList" },
+            "args": [ { "kind": "Var", "value": "x" } ]
+          }
+        },
+        "r": {
+          "kind": "Seq",
+          "l": {
+            "kind": "Ignore",
+            "value": {
+              "kind": "Call",
+              "f": { "kind": "Var", "value": "printList" },
+              "args": [ { "kind": "Var", "value": "y" } ]
+            }
+          },
+          "r": {
+            "kind": "Seq",
+            "l": {
+              "kind": "Ignore",
+              "value": {
+                "kind": "Call",
+                "f": { "kind": "Var", "value": "printList" },
+                "args": [
+                  {
+                    "kind": "Call",
+                    "f": { "kind": "Var", "value": "append" },
+                    "args": [
+                      { "kind": "Var", "value": "x" },
+                      { "kind": "Var", "value": "y" }
+                    ]
+                  }
+                ]
+              }
+            },
+            "r": {
+              "kind": "Call",
+              "f": { "kind": "Var", "value": "printList" },
+              "args": [
+                {
+                  "kind": "Call",
+                  "f": { "kind": "Var", "value": "append" },
+                  "args": [
+                    { "kind": "Var", "value": "y" },
+                    { "kind": "Var", "value": "x" }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

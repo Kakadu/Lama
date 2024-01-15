@@ -6,8 +6,12 @@
 .merlin
 
 .vscode
+/*.code-workspace
 
 # easier vendoring 
 /ostap
 /*.install
+
+
+
 

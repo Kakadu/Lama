@@ -1,0 +1,29 @@
+(rule
+ (deps
+  (:lama 1append.lama))
+ (targets 1append.lama.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -src2json
+   %{lama})))
+
+(rule
+ (deps
+  (:lama 1append.lama))
+ (targets 1append.bc.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -compile-to-bc-json
+   %{lama})))

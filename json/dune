@@ -9,6 +9,9 @@
  (flags
   (:standard -rectypes))
  (modules libSerialize)
+ (inline_tests)
+ (preprocess
+  (pps ppx_inline_test))
  (libraries yojson liba))
 
 (executable
@@ -46,3 +49,43 @@
  (section share)
  (source_trees tasks)
  (package Lama-Sirius))
+
+(rule
+ (target 1.lama.json)
+ (deps
+  (:dep tasks/1expr/1.lama.json))
+ (action
+  (run cp %{dep} %{target})))
+
+(rule
+ (target 1append.bc.json)
+ (deps
+  (:dep tasks/4other/1append.bc.json))
+ (action
+  (run cp %{dep} %{target})))
+
+(executable
+ (name lama_on_node)
+ ;  (package Lama-Sirius)
+ ;  (public_name lama_on_node)
+ (flags
+  (:standard -rectypes))
+ (modules lama_on_node)
+ (modes js)
+ (preprocessor_deps
+  (file "1.lama.json")
+  (file "1append.bc.json")
+  (file "index.html")
+  (file "styles.css")
+  ;(file "lama_on_node.ml")
+  )
+ (preprocess
+  (pps
+   ppx_blob
+   js_of_ocaml-ppx
+   ;
+   ))
+ (libraries libSerialize yojson liba js_of_ocaml))
+
+(cram
+ (deps ./lama_on_node.bc.js))
