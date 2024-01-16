@@ -27,3 +27,97 @@
    %{targets}
    -compile-to-bc-json
    %{lama})))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(rule
+ (deps
+  (:lama test050.lama))
+ (targets test050.lama.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -src2json
+   %{lama})))
+
+(rule
+ (deps
+  (:lama test050.lama))
+ (targets test050.bc.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -compile-to-bc-json
+   %{lama})))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(rule
+ (deps
+  (:lama test081.lama))
+ (targets 081zip.lama.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -src2json
+   %{lama})))
+
+(rule
+ (deps
+  (:lama test081.lama))
+ (targets 081zip.bc.json)
+ (mode (promote))
+ (action
+  (run
+   %{project_root}/json/json_bytecode.exe
+   -path
+   ../../../runtime
+   -o
+   %{targets}
+   -compile-to-bc-json
+   %{lama})))
+
+; (rule
+;  (deps
+;   (:lama ../../../regression/test111.lama))
+;  (targets 111concat.lama.json)
+;  (mode (promote))
+;  (action
+;   (run
+;    %{project_root}/json/json_bytecode.exe
+;    -path
+;    ../../../runtime
+;    -o
+;    %{targets}
+;    -src2json
+;    %{lama})))
+
+; (rule
+;  (deps
+;   (:lama ../../../regression/test111.lama))
+;  (targets 111concat.bc.json)
+;  (mode (promote))
+;  (action
+;   (run
+;    %{project_root}/json/json_bytecode.exe
+;    -path
+;    ../../../runtime
+;    -o
+;    %{targets}
+;    -compile-to-bc-json
+;    %{lama})))

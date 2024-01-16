@@ -64,10 +64,45 @@
  (action
   (run cp %{dep} %{target})))
 
+(rule
+ (target test050.bc.json)
+ (deps
+  (:dep tasks/4other/test050.bc.json))
+ (action
+  (run cp %{dep} %{target})))
+
+(rule
+ (target 081zip.bc.json)
+ (deps
+  (:dep tasks/4other/081zip.bc.json))
+ (action
+  (run cp %{dep} %{target})))
+
+(executable
+ (name client)
+ (flags
+  (:standard -rectypes))
+ (modules client)
+ (modes js)
+ (preprocessor_deps
+  (file "1write.bc.json")
+  (file "1append.bc.json")
+  (file "index.html")
+  (file "test050.bc.json")
+  (file "081zip.bc.json")
+  (file "styles.css")
+  ;
+  )
+ (preprocess
+  (pps
+   ppx_blob
+   js_of_ocaml-ppx
+   ;
+   ))
+ (libraries libSerialize yojson liba js_of_ocaml))
+
 (executable
  (name lama_on_node)
- ;  (package Lama-Sirius)
- ;  (public_name lama_on_node)
  (flags
   (:standard -rectypes))
  (modules lama_on_node)
@@ -76,8 +111,9 @@
   (file "1write.bc.json")
   (file "1append.bc.json")
   (file "index.html")
+  (file "test050.bc.json")
   (file "styles.css")
-  ;(file "lama_on_node.ml")
+  ;
   )
  (preprocess
   (pps
