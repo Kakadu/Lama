@@ -51,9 +51,9 @@
  (package Lama-Sirius))
 
 (rule
- (target 1.lama.json)
+ (target 1write.bc.json)
  (deps
-  (:dep tasks/1expr/1.lama.json))
+  (:dep tasks/1expr/1.bc.json))
  (action
   (run cp %{dep} %{target})))
 
@@ -73,7 +73,7 @@
  (modules lama_on_node)
  (modes js)
  (preprocessor_deps
-  (file "1.lama.json")
+  (file "1write.bc.json")
   (file "1append.bc.json")
   (file "index.html")
   (file "styles.css")
