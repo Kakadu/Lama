@@ -767,6 +767,7 @@ let run p i =
          inherit indexer p
 
          method builtin f args ((cstack, stack, glob, loc, i, o) : config) =
+          (* Printf.printf "Calling builtin %S\n%!" f; *)
            let f =
              match f.[0] with
              | 'L' -> String.sub f 1 (String.length f - 1)

@@ -1,0 +1,72 @@
+{
+  "kind": "Scope",
+  "decls": [
+    [ "x", [ "Local", { "kind": "Variable" } ] ],
+    [ "y", [ "Local", { "kind": "Variable" } ] ]
+  ],
+  "body": {
+    "kind": "Seq",
+    "l": {
+      "kind": "Ignore",
+      "value": {
+        "kind": "Assign",
+        "l": { "kind": "Ref", "value": "x" },
+        "r": {
+          "kind": "Array",
+          "value": [ { "kind": "Const", "value": 1 } ]
+        }
+      }
+    },
+    "r": {
+      "kind": "Seq",
+      "l": {
+        "kind": "Ignore",
+        "value": {
+          "kind": "Assign",
+          "l": { "kind": "Ref", "value": "y" },
+          "r": {
+            "kind": "Array",
+            "value": [
+              { "kind": "Var", "value": "x" },
+              { "kind": "Var", "value": "x" }
+            ]
+          }
+        }
+      },
+      "r": {
+        "kind": "Seq",
+        "l": {
+          "kind": "Ignore",
+          "value": {
+            "kind": "Assign",
+            "l": {
+              "kind": "ElemRef",
+              "l": {
+                "kind": "Elem",
+                "l": { "kind": "Var", "value": "y" },
+                "r": { "kind": "Const", "value": 1 }
+              },
+              "r": { "kind": "Const", "value": 0 }
+            },
+            "r": { "kind": "Const", "value": 2 }
+          }
+        },
+        "r": {
+          "kind": "Call",
+          "f": { "kind": "Var", "value": "write" },
+          "args": [
+            {
+              "kind": "Elem",
+              "l": {
+                "kind": "Elem",
+                "l": { "kind": "Var", "value": "y" },
+                "r": { "kind": "Const", "value": 0 }
+              },
+              "r": { "kind": "Const", "value": 0 }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

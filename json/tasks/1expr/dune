@@ -20,7 +20,7 @@
  (deps
   (:lama 1.lama)
   %{project_root}/runtime/Std.i)
- (targets 1.bc.json)
+ (targets 1write.bc.json)
  (mode (promote))
  (action
   (run

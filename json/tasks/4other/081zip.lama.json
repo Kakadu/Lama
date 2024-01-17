@@ -1,0 +1,467 @@
+{
+  "kind": "Scope",
+  "decls": [
+    [ "x", [ "Local", { "kind": "Variable" } ] ],
+    [ "y", [ "Local", { "kind": "Variable" } ] ],
+    [
+      "zip",
+      [
+        "Local",
+        {
+          "kind": "Fun",
+          "name": [ "x" ],
+          "body": {
+            "kind": "Scope",
+            "decls": [],
+            "body": {
+              "kind": "Case",
+              "scru": { "kind": "Var", "value": "x" },
+              "pats": [
+                [
+                  {
+                    "kind": "Sexp",
+                    "name": "Pair",
+                    "args": [
+                      { "kind": "Named", "name": "x", "arg": "Wildcard" },
+                      { "kind": "Named", "name": "y", "arg": "Wildcard" }
+                    ]
+                  },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Case",
+                      "scru": { "kind": "Var", "value": "x" },
+                      "pats": [
+                        [
+                          { "kind": "Sexp", "name": "Nil", "args": [] },
+                          {
+                            "kind": "Scope",
+                            "decls": [],
+                            "body": {
+                              "kind": "Sexp",
+                              "name": "Nil",
+                              "args": []
+                            }
+                          }
+                        ],
+                        [
+                          {
+                            "kind": "Sexp",
+                            "name": "Cons",
+                            "args": [
+                              {
+                                "kind": "Named",
+                                "name": "x",
+                                "arg": "Wildcard"
+                              },
+                              {
+                                "kind": "Named",
+                                "name": "xs",
+                                "arg": "Wildcard"
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "Scope",
+                            "decls": [],
+                            "body": {
+                              "kind": "Case",
+                              "scru": { "kind": "Var", "value": "y" },
+                              "pats": [
+                                [
+                                  {
+                                    "kind": "Sexp",
+                                    "name": "Nil",
+                                    "args": []
+                                  },
+                                  {
+                                    "kind": "Scope",
+                                    "decls": [],
+                                    "body": {
+                                      "kind": "Sexp",
+                                      "name": "Nil",
+                                      "args": []
+                                    }
+                                  }
+                                ],
+                                [
+                                  {
+                                    "kind": "Sexp",
+                                    "name": "Cons",
+                                    "args": [
+                                      {
+                                        "kind": "Named",
+                                        "name": "y",
+                                        "arg": "Wildcard"
+                                      },
+                                      {
+                                        "kind": "Named",
+                                        "name": "ys",
+                                        "arg": "Wildcard"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "Scope",
+                                    "decls": [],
+                                    "body": {
+                                      "kind": "Sexp",
+                                      "name": "Cons",
+                                      "args": [
+                                        {
+                                          "kind": "Sexp",
+                                          "name": "Pair",
+                                          "args": [
+                                            { "kind": "Var", "value": "x" },
+                                            { "kind": "Var", "value": "y" }
+                                          ]
+                                        },
+                                        {
+                                          "kind": "Call",
+                                          "f": {
+                                            "kind": "Var",
+                                            "value": "zip"
+                                          },
+                                          "args": [
+                                            {
+                                              "kind": "Sexp",
+                                              "name": "Pair",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "value": "xs"
+                                                },
+                                                {
+                                                  "kind": "Var",
+                                                  "value": "ys"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              ],
+                              "loc": [ 7, 27 ],
+                              "atr": "Weak"
+                            }
+                          }
+                        ]
+                      ],
+                      "loc": [ 5, 9 ],
+                      "atr": "Weak"
+                    }
+                  }
+                ]
+              ],
+              "loc": [ 4, 7 ],
+              "atr": "Weak"
+            }
+          }
+        }
+      ]
+    ],
+    [
+      "unzip",
+      [
+        "Local",
+        {
+          "kind": "Fun",
+          "name": [ "x" ],
+          "body": {
+            "kind": "Scope",
+            "decls": [],
+            "body": {
+              "kind": "Case",
+              "scru": { "kind": "Var", "value": "x" },
+              "pats": [
+                [
+                  { "kind": "Sexp", "name": "Nil", "args": [] },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Sexp",
+                      "name": "Pair",
+                      "args": [
+                        { "kind": "Sexp", "name": "Nil", "args": [] },
+                        { "kind": "Sexp", "name": "Nil", "args": [] }
+                      ]
+                    }
+                  }
+                ],
+                [
+                  {
+                    "kind": "Sexp",
+                    "name": "Cons",
+                    "args": [
+                      {
+                        "kind": "Sexp",
+                        "name": "Pair",
+                        "args": [
+                          { "kind": "Named", "name": "x", "arg": "Wildcard" },
+                          { "kind": "Named", "name": "y", "arg": "Wildcard" }
+                        ]
+                      },
+                      { "kind": "Named", "name": "tl", "arg": "Wildcard" }
+                    ]
+                  },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Case",
+                      "scru": {
+                        "kind": "Call",
+                        "f": { "kind": "Var", "value": "unzip" },
+                        "args": [ { "kind": "Var", "value": "tl" } ]
+                      },
+                      "pats": [
+                        [
+                          {
+                            "kind": "Sexp",
+                            "name": "Pair",
+                            "args": [
+                              {
+                                "kind": "Named",
+                                "name": "xs",
+                                "arg": "Wildcard"
+                              },
+                              {
+                                "kind": "Named",
+                                "name": "ys",
+                                "arg": "Wildcard"
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "Scope",
+                            "decls": [],
+                            "body": {
+                              "kind": "Sexp",
+                              "name": "Pair",
+                              "args": [
+                                {
+                                  "kind": "Sexp",
+                                  "name": "Cons",
+                                  "args": [
+                                    { "kind": "Var", "value": "x" },
+                                    { "kind": "Var", "value": "xs" }
+                                  ]
+                                },
+                                {
+                                  "kind": "Sexp",
+                                  "name": "Cons",
+                                  "args": [
+                                    { "kind": "Var", "value": "y" },
+                                    { "kind": "Var", "value": "ys" }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      ],
+                      "loc": [ 19, 12 ],
+                      "atr": "Weak"
+                    }
+                  }
+                ]
+              ],
+              "loc": [ 16, 7 ],
+              "atr": "Weak"
+            }
+          }
+        }
+      ]
+    ],
+    [
+      "printList",
+      [
+        "Local",
+        {
+          "kind": "Fun",
+          "name": [ "l" ],
+          "body": {
+            "kind": "Scope",
+            "decls": [],
+            "body": {
+              "kind": "Case",
+              "scru": { "kind": "Var", "value": "l" },
+              "pats": [
+                [
+                  { "kind": "Sexp", "name": "Nil", "args": [] },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Seq",
+                      "l": { "kind": "Skip" },
+                      "r": { "kind": "Const", "value": 0 }
+                    }
+                  }
+                ],
+                [
+                  {
+                    "kind": "Sexp",
+                    "name": "Cons",
+                    "args": [
+                      { "kind": "Named", "name": "x", "arg": "Wildcard" },
+                      { "kind": "Named", "name": "xs", "arg": "Wildcard" }
+                    ]
+                  },
+                  {
+                    "kind": "Scope",
+                    "decls": [],
+                    "body": {
+                      "kind": "Seq",
+                      "l": {
+                        "kind": "Ignore",
+                        "value": {
+                          "kind": "Call",
+                          "f": { "kind": "Var", "value": "write" },
+                          "args": [ { "kind": "Var", "value": "x" } ]
+                        }
+                      },
+                      "r": {
+                        "kind": "Call",
+                        "f": { "kind": "Var", "value": "printList" },
+                        "args": [ { "kind": "Var", "value": "xs" } ]
+                      }
+                    }
+                  }
+                ]
+              ],
+              "loc": [ 26, 7 ],
+              "atr": "Weak"
+            }
+          }
+        }
+      ]
+    ]
+  ],
+  "body": {
+    "kind": "Seq",
+    "l": {
+      "kind": "Ignore",
+      "value": {
+        "kind": "Assign",
+        "l": { "kind": "Ref", "value": "x" },
+        "r": {
+          "kind": "Sexp",
+          "name": "Cons",
+          "args": [
+            { "kind": "Const", "value": 1 },
+            {
+              "kind": "Sexp",
+              "name": "Cons",
+              "args": [
+                { "kind": "Const", "value": 2 },
+                {
+                  "kind": "Sexp",
+                  "name": "Cons",
+                  "args": [
+                    { "kind": "Const", "value": 3 },
+                    { "kind": "Sexp", "name": "Nil", "args": [] }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "r": {
+      "kind": "Seq",
+      "l": {
+        "kind": "Ignore",
+        "value": {
+          "kind": "Assign",
+          "l": { "kind": "Ref", "value": "y" },
+          "r": {
+            "kind": "Sexp",
+            "name": "Cons",
+            "args": [
+              { "kind": "Const", "value": 100 },
+              {
+                "kind": "Sexp",
+                "name": "Cons",
+                "args": [
+                  { "kind": "Const", "value": 200 },
+                  {
+                    "kind": "Sexp",
+                    "name": "Cons",
+                    "args": [
+                      { "kind": "Const", "value": 300 },
+                      { "kind": "Sexp", "name": "Nil", "args": [] }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "r": {
+        "kind": "Case",
+        "scru": {
+          "kind": "Call",
+          "f": { "kind": "Var", "value": "unzip" },
+          "args": [
+            {
+              "kind": "Call",
+              "f": { "kind": "Var", "value": "zip" },
+              "args": [
+                {
+                  "kind": "Sexp",
+                  "name": "Pair",
+                  "args": [
+                    { "kind": "Var", "value": "x" },
+                    { "kind": "Var", "value": "y" }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "pats": [
+          [
+            {
+              "kind": "Sexp",
+              "name": "Pair",
+              "args": [
+                { "kind": "Named", "name": "x", "arg": "Wildcard" },
+                { "kind": "Named", "name": "y", "arg": "Wildcard" }
+              ]
+            },
+            {
+              "kind": "Scope",
+              "decls": [],
+              "body": {
+                "kind": "Seq",
+                "l": {
+                  "kind": "Ignore",
+                  "value": {
+                    "kind": "Call",
+                    "f": { "kind": "Var", "value": "printList" },
+                    "args": [ { "kind": "Var", "value": "x" } ]
+                  }
+                },
+                "r": {
+                  "kind": "Call",
+                  "f": { "kind": "Var", "value": "printList" },
+                  "args": [ { "kind": "Var", "value": "y" } ]
+                }
+              }
+            }
+          ]
+        ],
+        "loc": [ 35, 5 ],
+        "atr": "Weak"
+      }
+    }
+  }
+}
