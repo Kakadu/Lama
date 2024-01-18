@@ -94,10 +94,56 @@ let () =
         Js._true);
   _combo##.selectedIndex := 0;
   on_change ()
-(*
-   let () =
-     let area = get_stru_text_exn () in
-     area##.onchange :=
-       Dom_html.handler (fun _ ->
-           console##log (Js.string "json changed");
-           Js._true) *)
+
+module Lama2JSON = struct
+  let () =
+    let input_area = Dom_html.createTextarea Dom_html.document in
+    input_area##setAttribute (Js.string "id") (Js.string "input_area_lama2json");
+    Dom.appendChild (Dom_html.getElementById_exn "left_lama2json") input_area
+
+  let () =
+    (Dom_html.getElementById_exn "left_lama2json")##.onclick
+    := Dom.handler (fun _ ->
+           console##log (Js.string "parse lama here");
+           Js._true)
+
+  let () =
+    let examples =
+      [
+        ("zip", Predefined.Other.test081zip);
+        ("append", Predefined.Other.append);
+        ("test50array", Predefined.Other.test50arrays);
+        ("1", Predefined.Expr.one);
+      ]
+    in
+    let _combo =
+      Dom_html.getElementById_coerce "lamaDemos" Dom_html.CoerceTo.select
+      |> Option.get
+    in
+    List.iter
+      (fun (name, _) ->
+        _combo##add
+          (let g = Dom_html.createOption Dom_html.document in
+           g##.label := Js.string name;
+           g)
+          Js.null)
+      examples;
+    let on_change () =
+      console##log _combo##.selectedIndex;
+      let textarea =
+        Dom_html.getElementById_coerce "input_area_lama2json"
+          Dom_html.CoerceTo.textarea
+        |> Option.get
+      in
+
+      textarea##.value :=
+        Js.string (snd (List.nth examples _combo##.selectedIndex))
+    in
+    _combo##.onchange :=
+      Dom_html.handler (fun _ ->
+          on_change ();
+          Js._true);
+    _combo##.selectedIndex := 0;
+    (* on_change (); *)
+    ()
+end
