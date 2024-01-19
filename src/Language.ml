@@ -149,6 +149,7 @@ module Value =
 
   end
 
+  (* module Types_ = Types *)
 (* Builtins *)
 module Builtin =
   struct
@@ -1084,6 +1085,9 @@ module Definition =
     ) in parse
 
   end
+;;
+type interface_lookup = { mutable ilookup : [ `Default | `Hardcoded of string ] }
+let interface_lookup = { ilookup = `Default }
 
 module Interface =
   struct
@@ -1118,7 +1122,8 @@ module Interface =
       Buffer.contents buf
 
     (* Read an interface file *)
-    let [@ocaml.warning "-26"] read fname =
+
+    let [@ocaml.warning "-26"] (read_string, read)  =
       let ostap (
               funspec: "F" "," i:IDENT ";" {`Fun i};
               varspec: "V" "," i:IDENT ";" {`Variable i};
@@ -1130,22 +1135,36 @@ module Interface =
               interface: (funspec | varspec | import | infix)*
             )
       in
-      try
-        let s = Util.read fname in
-        (match Util.parse (object
-                             inherit Matcher.t s
-                             inherit Util.Lexers.ident [] s
-                             inherit Util.Lexers.string s
-                             inherit Util.Lexers.skip  [Matcher.Skip.whitespaces " \t\n"] s
-                           end)
-                          (ostap (interface -EOF))
-         with
-         | `Ok intfs -> Some intfs
-         | `Fail er  -> report_error (Printf.sprintf "malformed interface file \"%s\": %s" fname er)
-        )
-      with Sys_error _ -> None
+
+      let read_string ~fname s = 
+        try
+          (match Util.parse (object
+                              inherit Matcher.t s
+                              inherit Util.Lexers.ident [] s
+                              inherit Util.Lexers.string s
+                              inherit Util.Lexers.skip  [Matcher.Skip.whitespaces " \t\n"] s
+                            end)
+                            (ostap (interface -EOF))
+          with
+          | `Ok intfs -> Some intfs
+          | `Fail er  -> report_error (Printf.sprintf "malformed interface file %S: %s" fname er)
+          )
+        with Sys_error _ -> None
+      in
+      let read fname =
+        try
+          let s = Util.read fname in
+          read_string ~fname s
+        with Sys_error _ -> None
+      in
+      (read_string, read)
 
     let find import paths =
+      match interface_lookup.ilookup with
+      | `Hardcoded str ->
+          let fname = "Std.i" in
+          (fname, Option.get @@ read_string ~fname str)
+      | `Default ->
       (*Printf.printf "Paths to search import in: %s" (show(list) (show(string)) paths); *)
       let rec inner = function
       | [] -> None
@@ -1257,9 +1276,7 @@ let parse cmd =
   in
   parse cmd
 
-
-let run_parser cmd =
-  let s   = Util.read cmd#get_infile in
+let run_parser_string cmd s =
   let kws = [
     "skip";
     "if"; "then"; "else"; "elif"; "fi";
@@ -1288,3 +1305,7 @@ let run_parser cmd =
      end
     )
     (if cmd#is_workaround then ostap (p:!(constparse cmd) -EOF)  else ostap (p:!(parse cmd) -EOF))
+
+let run_parser cmd =
+  let s   = Util.read cmd#get_infile in
+  run_parser_string cmd s

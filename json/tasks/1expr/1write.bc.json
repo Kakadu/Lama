@@ -1,6 +1,6 @@
 [
   { "kind": "IMPORT", "value": "Std" },
-  { "kind": "PUBLIC", "value": "1.lama" },
+  { "kind": "PUBLIC", "value": "1write.lama" },
   { "kind": "EXTERN", "value": "Llowercase" },
   { "kind": "EXTERN", "value": "Luppercase" },
   { "kind": "EXTERN", "value": "LtagHash" },
@@ -61,10 +61,10 @@
   { "kind": "EXTERN", "value": "Lsystem" },
   { "kind": "EXTERN", "value": "LgetEnv" },
   { "kind": "EXTERN", "value": "Lassert" },
-  { "kind": "LABEL", "value": "1.lama" },
+  { "kind": "LABEL", "value": "1write.lama" },
   {
     "kind": "BEGIN",
-    "s": "1.lama",
+    "s": "1write.lama",
     "f1": 0,
     "f2": 0,
     "ds": [],
