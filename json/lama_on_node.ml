@@ -24,4 +24,36 @@ let eval_bc_string contents =
   Format.printf "Result: @[%a@]\n%!" Format.(pp_print_list pp_print_int) rez;
   ()
 
-let () = eval_bc_string Predefined.Other.test50arrays
+let __ () = eval_bc_string Predefined.Other.test50arrays
+
+let () =
+  Language.interface_lookup.Language.ilookup <- `Hardcoded [%blob "Std.i"];
+  let name = "asdf.lama" in
+  let cmd =
+    object
+      method get_infile = name
+      method basename = name
+      method topname = name
+      method dump_SM _ = ()
+
+      method is_workaround =
+        false (* True gives parsing error about expected import *)
+
+      method get_include_paths = [ (* cfg.include_path *) ]
+    end
+  in
+  let contents = {| var x |} in
+  let rez =
+    Printexc.record_backtrace true;
+    try Language.run_parser_string cmd contents
+    with Invalid_argument s ->
+      Printf.eprintf "%s\n%!" s;
+      Printf.eprintf "%s\n%!" (Printexc.get_backtrace ());
+      exit 1
+  in
+
+  match rez with
+  | `Fail s ->
+      Printf.eprintf "Lama Parsing error:\n%s\n%!" s;
+      exit 1
+  | `Ok ((_, expr_ast) as prog) -> print_endline "parsed"

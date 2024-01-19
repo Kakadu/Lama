@@ -3,17 +3,22 @@ open Js_of_ocaml.Firebug
 
 module Predefined = struct
   module Expr = struct
-    let one = [%blob "1write.bc.json"]
+    let write = [%blob "1write.lama"]
+    let write_bc = [%blob "1write.bc.json"]
   end
 
   module Funs = struct
-    let fac = [%blob "1append.bc.json"]
+    let fac = [%blob "1append.lama"]
+    let fac_bc = [%blob "1append.bc.json"]
   end
 
   module Other = struct
-    let append = [%blob "1append.bc.json"]
-    let test50arrays = [%blob "test050.bc.json"]
-    let test081zip = [%blob "081zip.bc.json"]
+    let append = [%blob "1append.lama"]
+    let append_bc = [%blob "1append.bc.json"]
+    let test50arrays = [%blob "test050.lama"]
+    let test50arrays_bc = [%blob "test050.bc.json"]
+    let test081zip = [%blob "081zip.lama"]
+    let test081zip_bc = [%blob "081zip.bc.json"]
   end
 end
 
@@ -63,10 +68,10 @@ let () =
 let () =
   let examples =
     [
-      ("zip", Predefined.Other.test081zip);
-      ("append", Predefined.Other.append);
-      ("test50array", Predefined.Other.test50arrays);
-      ("1", Predefined.Expr.one);
+      ("zip", Predefined.Other.test081zip_bc);
+      ("append", Predefined.Other.append_bc);
+      ("test50array", Predefined.Other.test50arrays_bc);
+      ("write", Predefined.Expr.write_bc);
     ]
   in
   let _combo =
@@ -113,7 +118,7 @@ module Lama2JSON = struct
         ("zip", Predefined.Other.test081zip);
         ("append", Predefined.Other.append);
         ("test50array", Predefined.Other.test50arrays);
-        ("1", Predefined.Expr.one);
+        ("write", Predefined.Expr.write);
       ]
     in
     let _combo =
@@ -139,6 +144,7 @@ module Lama2JSON = struct
       textarea##.value :=
         Js.string (snd (List.nth examples _combo##.selectedIndex))
     in
+
     _combo##.onchange :=
       Dom_html.handler (fun _ ->
           on_change ();
@@ -146,4 +152,47 @@ module Lama2JSON = struct
     _combo##.selectedIndex := 0;
     (* on_change (); *)
     ()
+
+  let () =
+    Language.interface_lookup.Language.ilookup <- `Hardcoded [%blob "Std.i"]
+
+  let () =
+    console##log (Js.string "HERE");
+    console##log (Js.string Sys.os_type);
+    (Dom_html.getElementById_exn "lamaToJsonBtn")##.onclick
+    := Dom.handler (fun _ ->
+           console##log (Js.string "parsing...");
+           let contents =
+             let textarea =
+               Dom_html.getElementById_coerce "input_area_lama2json"
+                 Dom_html.CoerceTo.textarea
+               |> Option.get
+             in
+             Js.to_string textarea##.value
+           in
+
+           (* let contents = In_channel.with_open_text name In_channel.input_all in *)
+           let ast =
+             let name = "asdf.lama" in
+             let cmd =
+               object
+                 method get_infile = name
+                 method basename = name
+                 method topname = name
+                 method dump_SM _ = ()
+
+                 method is_workaround =
+                   false (* True gives parsing error about expected import *)
+
+                 method get_include_paths = [ (* cfg.include_path *) ]
+               end
+             in
+             let rez = Language.run_parser_string cmd contents in
+             match rez with
+             | `Fail s ->
+                 Printf.eprintf "Lama Parsing error:\n%s\n%!" s;
+                 exit 1
+             | `Ok ((_, expr_ast) as prog) -> expr_ast
+           in
+           Js._true)
 end

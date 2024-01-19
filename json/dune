@@ -53,7 +53,21 @@
 (rule
  (target 1write.bc.json)
  (deps
-  (:dep tasks/1expr/1.bc.json))
+  (:dep tasks/1expr/1write.bc.json))
+ (action
+  (run cp %{dep} %{target})))
+
+(rule
+ (target 1write.lama)
+ (deps
+  (:dep tasks/1expr/1write.lama))
+ (action
+  (run cp %{dep} %{target})))
+
+(rule
+ (target 1append.lama)
+ (deps
+  (:dep tasks/4other/1append.lama))
  (action
   (run cp %{dep} %{target})))
 
@@ -65,9 +79,23 @@
   (run cp %{dep} %{target})))
 
 (rule
+ (target test050.lama)
+ (deps
+  (:dep tasks/4other/test050.lama))
+ (action
+  (run cp %{dep} %{target})))
+
+(rule
  (target test050.bc.json)
  (deps
   (:dep tasks/4other/test050.bc.json))
+ (action
+  (run cp %{dep} %{target})))
+
+(rule
+ (target 081zip.lama)
+ (deps
+  (:dep tasks/4other/test081.lama))
  (action
   (run cp %{dep} %{target})))
 
@@ -78,6 +106,13 @@
  (action
   (run cp %{dep} %{target})))
 
+(rule
+ (target Std.i)
+ (deps
+  (:dep %{project_root}/runtime/Std.i))
+ (action
+  (run cp %{dep} %{target})))
+
 (executable
  (name client)
  (flags
@@ -85,12 +120,17 @@
  (modules client)
  (modes js)
  (preprocessor_deps
+  (file "1write.lama")
   (file "1write.bc.json")
+  (file "1append.lama")
   (file "1append.bc.json")
-  (file "index.html")
+  (file "test050.lama")
   (file "test050.bc.json")
+  (file "081zip.lama")
   (file "081zip.bc.json")
+  (file "index.html")
   (file "styles.css")
+  (file "Std.i")
   ;
   )
  (preprocess
@@ -107,12 +147,22 @@
   (:standard -rectypes))
  (modules lama_on_node)
  (modes js)
+ (js_of_ocaml
+  (flags
+   --pretty
+   --no-inline
+   --debug-info
+   --disable
+   deadcode
+   --target-env
+   node))
  (preprocessor_deps
   (file "1write.bc.json")
   (file "1append.bc.json")
   (file "index.html")
   (file "test050.bc.json")
   (file "styles.css")
+  (file "Std.i")
   ;
   )
  (preprocess
@@ -123,5 +173,39 @@
    ))
  (libraries libSerialize yojson liba js_of_ocaml))
 
+(executable
+ (name node_shallow)
+ (flags
+  (:standard -rectypes))
+ (modules node_shallow)
+ (modes js exe)
+ (js_of_ocaml
+  (flags
+   --pretty
+   --no-inline
+   --debug-info
+   --disable
+   deadcode
+   --target-env
+   node))
+ (preprocessor_deps
+  (file "1write.bc.json")
+  (file "1append.bc.json")
+  (file "index.html")
+  (file "test050.bc.json")
+  (file "styles.css")
+  (file "Std.i")
+  ;
+  )
+ (preprocess
+  (action
+   (run %{project_root}/src/pp5+gt+plugins+ostap+dump.byte %{input-file})))
+ (libraries ostap))
+
 (cram
+ (applies_to testJS)
  (deps ./lama_on_node.bc.js))
+
+(cram
+ (applies_to node_shallow)
+ (deps ./node_shallow.bc.js))
